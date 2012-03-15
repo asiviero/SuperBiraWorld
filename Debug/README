@@ -1,0 +1,21 @@
+Physics Simulator
+
+Author: Andre Siviero
+Institution: Universidade Federal do Espirito Santo, Brasil (Federal University of Espirito Santo, Brazil)
+
+This is a very basic physics simulator. I'm using OpenGL and C++ to simulate simple physical phenomena, such
+as gravity, bouncing, friction (on surfaces and, futurely, on air) and collision with punctual bodies.
+
+Any help is deeply appreciated, as this is only academical interest, although it could be adapted as an engine
+for gaming and other kinds of simulation.
+
+I'm trying to keep the code as organised and structured as possible and, thus far, it has a clear division between
+drawing (mostly handled by OpenGL) and the physics itself (mostly contained as the code for the main Agent).
+
+Drawing is very simple and any basic experience in OpenGL is certain to be enough to understand what I'm doing here.
+I myself don't have neither much knowledge or experience with graphics, so I'm keeping it as simple as possible.
+
+The main Agent code is where the magic happens. It's a class, whose properties deal with the agent's characteristics
+and movement vectors. Its methods deal mostly with the movement. There're 4 main vectors: floatAgentPosition, floatAgentSpeed,
+floatAgentAcceleration and floatAgentForce, who, as it may look like, control the agent's position, speed, acceleration and the
+resulting force acting on it. All the math is included in this class methods.
