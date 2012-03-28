@@ -10,6 +10,13 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include src/subdir.mk
+-include Box2D/Rope/subdir.mk
+-include Box2D/Dynamics/subdir.mk
+-include Box2D/Dynamics/Joints/subdir.mk
+-include Box2D/Dynamics/Contacts/subdir.mk
+-include Box2D/Common/subdir.mk
+-include Box2D/Collision/subdir.mk
+-include Box2D/Collision/Shapes/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

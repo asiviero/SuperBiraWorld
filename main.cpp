@@ -9,6 +9,15 @@
 
 agent *mainAgent = new agent(STANDARD_LOSS_COEFFICIENT);
 
+b2Vec2 gravity(0.0f,-9.8f);
+bool doSleep = true;
+b2World world = b2World(gravity);
+b2BodyDef groundBodyDef;
+b2Body* groundBody;
+b2PolygonShape groundBox;
+
+
+
 void display(void);
 
 int main(int argc, char** argv) {
@@ -23,6 +32,24 @@ int main(int argc, char** argv) {
 	// Handler Functions
 	glutKeyboardFunc(keyboardHandler);
 	glutSpecialFunc(specialKeysHandler);
+
+	// box2d functions
+
+	// Creating the "floor" body
+	groundBodyDef.position.Set(0,-10);
+	groundBody = world.CreateBody(&groundBodyDef);
+
+	// Creates a box, which is to be featured in the floor body
+	groundBox.SetAsBox(X_AXIS_SIZE,Y_AXIS_SIZE/2);
+
+	// Applies it
+	groundBody->CreateFixture(&groundBox,0);
+
+	// Sets the class used for debug drawing. It came from Box2d testbed
+	DebugDraw drawclass = DebugDraw();
+	drawclass.SetFlags(1);
+	world.SetDebugDraw(&drawclass);
+
 
 	// Rendering
 	initScreen();
@@ -39,8 +66,11 @@ void display(void)
 		glPushMatrix();
 		// Simulator functions begin here
 		drawGrid();
-		mainAgent->drawAgent();
-		mainAgent->moveAgent();
+		//mainAgent->drawAgent();		mainAgent->moveAgent();
+
+		// Draws every object in the world
+		world.DrawDebugData();
+
 		// Simulator functions end here
 		glPopMatrix();
 		glutPostRedisplay();
