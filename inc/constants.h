@@ -33,9 +33,9 @@
 #define STD_FORCE_HORIZONTAL 1
 
 // These constants stand for the maximum coordinates allowed in a screen
-#define X_AXIS_SIZE 1e2
-#define Y_AXIS_SIZE 1e2
-#define Z_AXIS_SIZE 1e2
+#define X_AXIS_SIZE 2e2
+#define Y_AXIS_SIZE 2e2
+#define Z_AXIS_SIZE 2e2
 
 // These constants stand for the width and height of the main window
 #define MAIN_WINDOW_WIDTH 400

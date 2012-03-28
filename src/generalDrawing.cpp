@@ -16,19 +16,19 @@
 void drawGrid() {
 	float floatGridMarker;
 	for(int i=0;i<HORIZONTAL_GRID_LINES;i++) {
-		floatGridMarker = -X_AXIS_SIZE + i*(2*X_AXIS_SIZE/HORIZONTAL_GRID_LINES);
+		floatGridMarker = i*(X_AXIS_SIZE/HORIZONTAL_GRID_LINES);
 		glColor3f(0,0,0);
 		glBegin(GL_LINE);
 			glVertex2f(floatGridMarker,Y_AXIS_SIZE);
-			glVertex2f(floatGridMarker,-Y_AXIS_SIZE);
+			glVertex2f(floatGridMarker,0);
 		glEnd();
 	}
 	for(int i=0;i<VERTICAL_GRID_LINES;i++) {
-		floatGridMarker = -Y_AXIS_SIZE + i*(2*Y_AXIS_SIZE/VERTICAL_GRID_LINES);
+		floatGridMarker = i*(Y_AXIS_SIZE/VERTICAL_GRID_LINES);
 		glColor3f(0,0,0);
 		glBegin(GL_LINE);
 			glVertex2f(X_AXIS_SIZE,floatGridMarker);
-			glVertex2f(-X_AXIS_SIZE,floatGridMarker);
+			glVertex2f(0,floatGridMarker);
 		glEnd();
 	}
 }
@@ -42,5 +42,5 @@ void initScreen (void)
 /*  initialize viewing values  */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-X_AXIS_SIZE, X_AXIS_SIZE, -Y_AXIS_SIZE, Y_AXIS_SIZE, -Z_AXIS_SIZE, Z_AXIS_SIZE);
+    glOrtho(0, X_AXIS_SIZE, 0, Y_AXIS_SIZE, 0, Z_AXIS_SIZE);
 }

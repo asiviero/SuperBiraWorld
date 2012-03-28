@@ -11,6 +11,7 @@
 // System Libs
 #include <iostream>
 using namespace std;
+#include <fstream>
 #include <string>
 #include <cmath>
 #include <pthread.h>
@@ -27,6 +28,9 @@ using namespace std;
 #include "inc/generalDrawing.h"
 #include "inc/agent.h"
 #include "inc/timer.h"
+#include "inc/list.h"
+#include "inc/terrain.h"
+
 #include "Render.h"
 
 #include "Box2D/Box2D.h"
