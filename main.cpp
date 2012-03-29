@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 	world.SetDebugDraw(&drawclass);
 
 	// Terrain loading
-	char terrainFile[] = "../src/terrain/maps/test.map";
+	char terrainFile[] = "../maps/test.map";
 	ifstream terrainMap(terrainFile);
 	//cout << "passei!\n";
 	if(terrainMap.is_open()) {

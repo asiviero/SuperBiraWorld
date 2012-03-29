@@ -1,0 +1,34 @@
+Please read this before trying to build any terrains
+
+In this file, I address the format used to generate geometric terrain in the game's world
+Please notice only positive coordinates are allowed due to Box2D limitations.
+
+Your .map file must contain
+- the number of polygons listed
+- for each polygon:
+	- the number of vertexes
+	- the coordinates (positive), in both axis
+	
+And that's it. As simple as it can get. In a better notation, one would expect something as follows:
+
+< number of polygons >
+< polygon 1 number of vertexes >
+< vertex 1 x coordinate > < vertex 1 y coordinate >
+< vertex 2 y coordinate > < vertex 2 y coordinate >
+...
+< vertex n x coordinate > < vertex n y coordinate >
+<polygon 2 number of vertexes>
+< vertex 1 x coordinate > < vertex 1 y coordinate >
+< vertex 2 y coordinate > < vertex 2 y coordinate >
+...
+< vertex n x coordinate > < vertex n y coordinate >
+...
+<polygon n number of vertexes>
+< vertex 1 x coordinate > < vertex 1 y coordinate >
+< vertex 2 y coordinate > < vertex 2 y coordinate >
+...
+< vertex n x coordinate > < vertex n y coordinate >
+
+Example files are in this folder, so you can use them as guidelines.
+
+André Siviero
