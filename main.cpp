@@ -9,17 +9,13 @@
 
 agent *mainAgent = new agent(STANDARD_LOSS_COEFFICIENT);
 
-b2Vec2 gravity(0.0f,-9.8f);
+b2Vec2 gravity(0.0f,-9.7f);
 bool doSleep = true;
-b2World *world = new b2World(gravity);
-b2BodyDef groundBodyDef,MainAgentDef;
-b2Body *MainAgent;
-b2PolygonShape groundBox,MainAgentShape;
+b2World world = b2World(gravity);
+b2BodyDef groundBodyDef,bodydeftest;
+b2Body* groundBody,*bodyTest2;
+b2PolygonShape groundBox,polyTest1;
 //list <b2body*> *b2BodyList = new list <b2Body*>;
-
-float32 timeStep = 1/20.0;      //the length of time passed to simulate (seconds)
-int32 velocityIterations = 8;   //how strongly to correct velocity
-int32 positionIterations = 3;   //how strongly to correct position
 
 
 
@@ -42,22 +38,24 @@ int main(int argc, char** argv) {
 	// box2d functions
 
 	// Creating the "floor" body
-	MainAgentDef.position.Set(X_AXIS_SIZE/2,Y_AXIS_SIZE/2);
-	MainAgentDef.type = b2_dynamicBody;
-	MainAgent = world->CreateBody(&MainAgentDef);
+	groundBodyDef.position.Set(0,-Y_AXIS_SIZE/2);
+	groundBody = world.CreateBody(&groundBodyDef);
 
-	// Creates a box, which is to be featured in the agent body
-	MainAgentShape.SetAsBox(4,4);
-	//polyTest1.SetAsBox(X_AXIS_SIZE/10,Y_AXIS_SIZE/10);
+	bodydeftest.position.Set(0,0);
+	bodyTest2 = world.CreateBody(&bodydeftest);
+
+	// Creates a box, which is to be featured in the floor body
+	groundBox.SetAsBox(X_AXIS_SIZE,Y_AXIS_SIZE/2);
+	polyTest1.SetAsBox(X_AXIS_SIZE/10,Y_AXIS_SIZE/10);
 
 	// Applies it
-	MainAgent->CreateFixture(&MainAgentShape,0);
-	//bodyTest2->CreateFixture(&polyTest1,0);
+	groundBody->CreateFixture(&groundBox,0);
+	bodyTest2->CreateFixture(&polyTest1,0);
 
 	// Sets the class used for debug drawing. It came from Box2d testbed
 	DebugDraw drawclass = DebugDraw();
 	drawclass.SetFlags(1);
-	world->SetDebugDraw(&drawclass);
+	world.SetDebugDraw(&drawclass);
 
 	// Terrain loading
 	char terrainFile[] = "../maps/test.map";
@@ -65,7 +63,7 @@ int main(int argc, char** argv) {
 	//cout << "passei!\n";
 	if(terrainMap.is_open()) {
 		//cout << "map file loaded succesfully, passing it on to function\n";
-		loadTerrain(terrainMap,world);
+		loadTerrain(terrainMap,&world);
 	}
 	terrainMap.close();
 	//cout << "passei!\n";
@@ -88,8 +86,7 @@ void display(void)
 		//mainAgent->drawAgent();		mainAgent->moveAgent();
 
 		// Draws every object in the world
-		world->Step(timeStep, velocityIterations, positionIterations);
-		world->DrawDebugData();
+		world.DrawDebugData();
 
 		// Simulator functions end here
 		glPopMatrix();
@@ -132,7 +129,6 @@ void specialKeysHandler(int button, int x, int y) {
 void keyboardHandler(unsigned char button, int x, int y) {
 	switch(button) {
 		case ESC_KEY:
-			delete world;
 			exit(0);
 			break;
 		case 's':
