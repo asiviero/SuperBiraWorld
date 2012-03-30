@@ -10,6 +10,7 @@ CPP_SRCS += \
 ../src/friction.cpp \
 ../src/generalDrawing.cpp \
 ../src/gravity.cpp \
+../src/terrain.cpp \
 ../src/timer.cpp \
 ../src/userInput.cpp 
 
@@ -20,6 +21,7 @@ OBJS += \
 ./src/friction.o \
 ./src/generalDrawing.o \
 ./src/gravity.o \
+./src/terrain.o \
 ./src/timer.o \
 ./src/userInput.o 
 
@@ -30,6 +32,7 @@ CPP_DEPS += \
 ./src/friction.d \
 ./src/generalDrawing.d \
 ./src/gravity.d \
+./src/terrain.d \
 ./src/timer.d \
 ./src/userInput.d 
 

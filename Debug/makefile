@@ -10,7 +10,6 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include src/subdir.mk
--include src/terrain/subdir.mk
 -include Box2D/Rope/subdir.mk
 -include Box2D/Dynamics/subdir.mk
 -include Box2D/Dynamics/Joints/subdir.mk

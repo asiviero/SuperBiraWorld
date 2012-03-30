@@ -5,7 +5,7 @@
  *      Author: andre
  */
 
-#include "../../inc.h"
+#include "../inc.h"
 
 void loadTerrain(ifstream &map,b2World *world) {
 	int32 intNBodiesOnTerrain=0;
