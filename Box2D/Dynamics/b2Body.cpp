@@ -103,7 +103,10 @@ b2Body::b2Body(const b2BodyDef* bd, b2World* world)
 
 	m_fixtureList = NULL;
 	m_fixtureCount = 0;
+
 }
+
+
 
 b2Body::~b2Body()
 {

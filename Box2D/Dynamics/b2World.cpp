@@ -16,10 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include "../../inc/m_move.h"
+
 #include <iostream>
 using namespace std;
 
 #include <Box2D/Dynamics/b2World.h>
+
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2Fixture.h>
 #include <Box2D/Dynamics/b2Island.h>
@@ -36,6 +39,9 @@ using namespace std;
 #include <Box2D/Common/b2Draw.h>
 #include <Box2D/Common/b2Timer.h>
 #include <new>
+
+#define X_AXIS 0
+#define Y_AXIS 1
 
 b2World::b2World(const b2Vec2& gravity)
 {
@@ -963,6 +969,27 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 	m_flags &= ~e_locked;
 
 	m_profile.step = stepTimer.GetMilliseconds();
+
+	enum _moveState {
+	    MS_STOP,
+	    MS_UP,
+	    MS_LEFT,
+	    MS_RIGHT,
+	  };
+	b2Vec2 vel;
+	b2Body *body = NULL;
+	//cout << "passei2\n";
+	for(body = GetBodyList();body->GetType()!=b2_dynamicBody;body=body->GetNext());
+	//cout << body->;
+	m_move *t = static_cast<m_move*>(body->GetUserData());
+	switch(t->m_state[X_AXIS]) {
+		  case MS_LEFT:  vel.x = -5; break;
+	      case MS_STOP:  vel.x =  0; break;
+	      case MS_RIGHT: vel.x =  5; break;
+	}
+	if(t->m_state[Y_AXIS]==MS_UP) vel.y = 5;
+	else vel.y = body->GetLinearVelocity().y;
+	body->SetLinearVelocity(vel);
 }
 
 void b2World::ClearForces()

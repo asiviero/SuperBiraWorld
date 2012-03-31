@@ -457,6 +457,14 @@ private:
 
 	float32 m_sleepTime;
 
+	enum moveState {
+	    MS_STOP,
+	    MS_LEFT,
+	    MS_RIGHT,
+	  };
+
+	moveState m_move;
+
 	void* m_userData;
 };
 
