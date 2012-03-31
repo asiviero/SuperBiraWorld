@@ -30,11 +30,19 @@ using namespace std;
 #include "inc/timer.h"
 #include "inc/list.h"
 #include "inc/terrain.h"
+#include "inc/m_move.h"
+#include "inc/directional.h"
 
 #include "Render.h"
 
 #include <Box2D/Box2D.h>
 
+enum _moveState {
+    MS_STOP,
+    MS_UP,
+    MS_LEFT,
+    MS_RIGHT,
+  };
 
 
 
