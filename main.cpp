@@ -15,10 +15,12 @@ b2World *world = new b2World(gravity);
 b2BodyDef groundBodyDef,MainAgentDef;
 b2Body *MainAgent;
 b2PolygonShape groundBox,MainAgentShape;
-//list <b2body*> *b2BodyList = new list <b2Body*>;
+b2FixtureDef MainAgentFixtureDef;
+b2Fixture *MainAgentFixture;
+
 
 float32 timeStep = 1/20.0;      //the length of time passed to simulate (seconds)
-int32 velocityIterations = 8;   //how strongly to correct velocity
+int32 velocityIterations = 6;   //how strongly to correct velocity
 int32 positionIterations = 3;   //how strongly to correct position
 
 
@@ -41,18 +43,26 @@ int main(int argc, char** argv) {
 
 	// box2d functions
 
-	// Creating the "floor" body
+	m_move *moveTest = new m_move();
+	moveTest->m_state[X_AXIS] = moveTest->m_state[Y_AXIS] = MS_STOP;
+	// Creating the body
 	MainAgentDef.position.Set(X_AXIS_SIZE/2,Y_AXIS_SIZE/2);
 	MainAgentDef.type = b2_dynamicBody;
+
 	MainAgent = world->CreateBody(&MainAgentDef);
+	MainAgent->SetUserData(moveTest);
 
 	// Creates a box, which is to be featured in the agent body
 	MainAgentShape.SetAsBox(4,4);
+	MainAgentFixtureDef.friction = 0.2;
+	MainAgentFixtureDef.restitution = 0.8;
+	MainAgentFixtureDef.shape = &MainAgentShape;
+
 	//polyTest1.SetAsBox(X_AXIS_SIZE/10,Y_AXIS_SIZE/10);
 
 	// Applies it
-	MainAgent->CreateFixture(&MainAgentShape,0);
-	//bodyTest2->CreateFixture(&polyTest1,0);
+	MainAgent->CreateFixture(&MainAgentFixtureDef);
+	MainAgent->ResetMassData();
 
 	// Sets the class used for debug drawing. It came from Box2d testbed
 	DebugDraw drawclass = DebugDraw();
@@ -87,8 +97,13 @@ void display(void)
 		drawGrid();
 		//mainAgent->drawAgent();		mainAgent->moveAgent();
 
+		//cout << "Agent Move: " << MainAgent-> << endl;
 		// Draws every object in the world
+		//cout << "passei\n";
+		cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << endl;
+
 		world->Step(timeStep, velocityIterations, positionIterations);
+		//cout << "passei\n";
 		world->DrawDebugData();
 
 		// Simulator functions end here
@@ -103,8 +118,8 @@ void specialKeysHandler(int button, int x, int y) {
 	switch(button) {
 		case GLUT_KEY_UP:
 			pthread_t timerThreadUp;
-			if(mainAgent->floatAgentPosition[Y_AXIS] <=0) mainAgent->setMoveDirectional(UP_CONSTANT,INTENTION);
-			pthread_create(&timerThreadUp,NULL,timer,mainAgent);
+			//if(mainAgent->floatAgentPosition[Y_AXIS] <=0) mainAgent->setMoveDirectional(UP_CONSTANT,INTENTION);
+			pthread_create(&timerThreadUp,NULL,timerJump,MainAgent);
 			//mainAgent->setMoveDirectional(UP_CONSTANT,MOVEMENT);
 			break;
 		case GLUT_KEY_DOWN:
@@ -112,13 +127,11 @@ void specialKeysHandler(int button, int x, int y) {
 			break;
 		case GLUT_KEY_LEFT:
 			pthread_t timerThreadLeft;
-			mainAgent->setMoveDirectional(LEFT_CONSTANT,INTENTION);
-			pthread_create(&timerThreadLeft,NULL,timer,mainAgent);
+			pthread_create(&timerThreadLeft,NULL,timerMoveLeft,MainAgent);
 			break;
 		case GLUT_KEY_RIGHT:
 			pthread_t timerThreadRight;
-			mainAgent->setMoveDirectional(RIGHT_CONSTANT,INTENTION);
-			pthread_create(&timerThreadRight,NULL,timer,mainAgent);
+			pthread_create(&timerThreadRight,NULL,timerMoveRight,MainAgent);
 			break;
 		case GLUT_KEY_END:
 			mainAgent->resetForces(X_AXIS);
