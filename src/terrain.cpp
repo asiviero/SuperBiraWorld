@@ -11,6 +11,7 @@ void loadTerrain(ifstream &map,b2World *world) {
 	int32 intNBodiesOnTerrain=0;
 	int intNVertexPolygon;
 	float fVertexCoordinates[2];
+	b2FixtureDef fixture;
 	b2PolygonShape polygon;
 	b2BodyDef bodydef;
 	b2Body *body;
@@ -29,8 +30,11 @@ void loadTerrain(ifstream &map,b2World *world) {
 		// defining a body
 		// further improvement could be done about centroids
 		polygon.Set(vector2dVertexPosition,intNVertexPolygon);
+
+		fixture.friction = 0.9;
+		fixture.shape = &polygon;
 		// attaching body to world and shape to body
 		body = world->CreateBody(&bodydef);
-		body->CreateFixture(&polygon,0);
+		body->CreateFixture(&fixture);
 	}
 }

@@ -17,7 +17,7 @@ void *timer(void *ag) {
 		agent->SetUserData(mvtmp);
 
 
-		endwait = clock () + 0.2 * CLOCKS_PER_SEC;
+		endwait = clock () + 0.1 * CLOCKS_PER_SEC;
 
 	  	while (clock() < endwait);
 	  	cout << "timer out!" << endl;
