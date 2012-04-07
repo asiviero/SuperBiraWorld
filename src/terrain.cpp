@@ -31,7 +31,7 @@ void loadTerrain(ifstream &map,b2World *world) {
 		// further improvement could be done about centroids
 		polygon.Set(vector2dVertexPosition,intNVertexPolygon);
 
-		fixture.friction = 0.9;
+		fixture.friction = 0.7;
 		fixture.shape = &polygon;
 		// attaching body to world and shape to body
 		body = world->CreateBody(&bodydef);

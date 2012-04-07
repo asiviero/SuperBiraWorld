@@ -56,8 +56,9 @@ int main(int argc, char** argv) {
 
 	// Creates a box, which is to be featured in the agent body
 	MainAgentShape.SetAsBox(4,4);
-	MainAgentFixtureDef.friction = 0.2;
-	MainAgentFixtureDef.restitution = 0.8;
+	MainAgentFixtureDef.friction = 0.1;
+	MainAgentFixtureDef.density = 0.1;
+	MainAgentFixtureDef.restitution = 0;
 	MainAgentFixtureDef.shape = &MainAgentShape;
 
 	//polyTest1.SetAsBox(X_AXIS_SIZE/10,Y_AXIS_SIZE/10);
@@ -105,7 +106,7 @@ void display(void)
 		world->DrawDebugData();
 
 		//cout << "passei\n";
-		cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << endl;
+		//cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << endl;
 
 		world->Step(timeStep, velocityIterations, positionIterations);
 		//cout << "passei\n";

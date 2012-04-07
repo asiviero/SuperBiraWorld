@@ -134,7 +134,7 @@ void agent::moveAgent() {
 	// resetting input forces
 	//resetDirectionalMovement();
 
-	cout << floatAgentSpeed[X_AXIS] << " "<< floatAgentPosition[X_AXIS] << endl;
+	//cout << floatAgentSpeed[X_AXIS] << " "<< floatAgentPosition[X_AXIS] << endl;
 	//if(boolMoveUp) sleep(1);
 	//if(floatAgentSpeed[X_AXIS] !=0) resetForces(X_AXIS);
 
