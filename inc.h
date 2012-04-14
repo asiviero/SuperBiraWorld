@@ -32,6 +32,7 @@ using namespace std;
 #include "inc/terrain.h"
 #include "inc/m_move.h"
 #include "inc/directional.h"
+#include "inc/camera.h"
 
 #include "Render.h"
 

@@ -7,7 +7,6 @@
 
 #include "inc.h"
 
-agent *mainAgent = new agent(STANDARD_LOSS_COEFFICIENT);
 
 b2Vec2 gravity(0.0f,-9.7f);
 bool doSleep = true;
@@ -20,6 +19,8 @@ b2Body *MainAgent;
 b2PolygonShape groundBox,MainAgentShape;
 b2FixtureDef MainAgentFixtureDef;
 b2Fixture *MainAgentFixture;
+
+camera *cam = new camera();
 
 
 float32 timeStep = 1/20.0;      //the length of time passed to simulate (seconds)
@@ -36,7 +37,7 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(1200,800);
 	glutInitWindowSize(MAIN_WINDOW_WIDTH,MAIN_WINDOW_HEIGHT);
 	int intMainWindowID;
-	intMainWindowID = glutCreateWindow("Physics Simulator");
+	intMainWindowID = glutCreateWindow("Super Bira World");
 
 	// Handler Functions
 	glutKeyboardFunc(keyboardHandler);
@@ -83,6 +84,7 @@ int main(int argc, char** argv) {
 	terrainMap.close();
 	//cout << "passei!\n";
 
+
 	// Rendering
 	initScreen();
 	glutDisplayFunc(display);
@@ -106,14 +108,18 @@ void display(void)
 		world->DrawDebugData();
 
 		//cout << "passei\n";
-		cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << " " << ((m_move*)MainAgent->GetUserData())->m_state[Y_AXIS] << endl;
+		//cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << " " << ((m_move*)MainAgent->GetUserData())->m_state[Y_AXIS] << endl;
 
 
 		world->Step(timeStep, velocityIterations, positionIterations);
 		//cout << "passei\n";
 
-
 		// Simulator functions end here
+
+		// Camera operations
+		cam->checkForBorder(0.8,MainAgent);
+
+		// End of Camera functions
 		glPopMatrix();
 		glutPostRedisplay();
 		glutSwapBuffers();
@@ -130,7 +136,7 @@ void specialKeysHandler(int button, int x, int y) {
 			//mainAgent->setMoveDirectional(UP_CONSTANT,MOVEMENT);
 			break;
 		case GLUT_KEY_DOWN:
-			mainAgent->setMoveDirectional(DOWN_CONSTANT,MOVEMENT);
+			//mainAgent->setMoveDirectional(DOWN_CONSTANT,MOVEMENT);
 			break;
 		case GLUT_KEY_LEFT:
 			pthread_t timerThreadLeft;
@@ -141,11 +147,12 @@ void specialKeysHandler(int button, int x, int y) {
 			pthread_create(&timerThreadRight,NULL,timerMoveRight,MainAgent);
 			break;
 		case GLUT_KEY_END:
-			mainAgent->resetForces(X_AXIS);
-			mainAgent->resetForces(Y_AXIS);
+			//mainAgent->resetForces(X_AXIS);
+			//mainAgent->resetForces(Y_AXIS);
 			break;
 		default:
-			mainAgent->setMoveDirectional(NULL,NULL);
+			break;
+			//mainAgent->setMoveDirectional(NULL,NULL);
 	}
 }
 
@@ -156,8 +163,8 @@ void keyboardHandler(unsigned char button, int x, int y) {
 			break;
 		case 's':
 		pthread_t timerThreadUp;
-		if(mainAgent->floatAgentPosition[Y_AXIS] <=0) mainAgent->setMoveDirectional(UP_CONSTANT,INTENTION);
-		pthread_create(&timerThreadUp,NULL,timer,mainAgent);
+		//if(mainAgent->floatAgentPosition[Y_AXIS] <=0) mainAgent->setMoveDirectional(UP_CONSTANT,INTENTION);
+		//pthread_create(&timerThreadUp,NULL,timer,mainAgent);
 		//mainAgent->setMoveDirectional(UP_CONSTANT,MOVEMENT);
 		break;
 	}
