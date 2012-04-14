@@ -106,7 +106,8 @@ void display(void)
 		world->DrawDebugData();
 
 		//cout << "passei\n";
-		//cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << endl;
+		cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << " " << ((m_move*)MainAgent->GetUserData())->m_state[Y_AXIS] << endl;
+
 
 		world->Step(timeStep, velocityIterations, positionIterations);
 		//cout << "passei\n";

@@ -983,13 +983,13 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 	//cout << body->;
 	m_move *t = static_cast<m_move*>(body->GetUserData());
 	switch(t->m_state[X_AXIS]) {
-		  case MS_LEFT:  vel.x = -5; break;
+		  case MS_LEFT:  vel.x = -50; break;
 	      case MS_STOP:  vel.x =  0; break;
-	      case MS_RIGHT: vel.x =  5; break;
+	      case MS_RIGHT: vel.x =  50; break;
 	}
-	if(t->m_state[Y_AXIS]==MS_UP) vel.y = 5;
-	else vel.y = body->GetLinearVelocity().y;
-	body->SetLinearVelocity(vel);
+	if(t->m_state[Y_AXIS]==MS_UP) vel.y = 100;
+	//else vel.y = body->GetLinearVelocity().y;
+	body->ApplyForce(vel,body->GetWorldCenter());
 }
 
 void b2World::ClearForces()
