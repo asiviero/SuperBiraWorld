@@ -77,11 +77,18 @@
 #define STANDARD_LOSS_COEFFICIENT 1
 
 // Constant for the time force is applied
-#define AGENT_FORCE_TIME_X 0.008
+#define AGENT_FORCE_TIME_X 0.1
 #define AGENT_FORCE_TIME_Y 0.1
 
 // Constants to define if movement refers to actual movement or intention
 #define MOVEMENT 0
 #define INTENTION 1
+
+// Object types
+#define MAIN_AGENT 0
+#define CAMERA 1
+
+// Camera tolerance
+#define CAMERA_LIMIT 0.8
 
 #endif /* CONSTANTS_H_ */

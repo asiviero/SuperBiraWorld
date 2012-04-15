@@ -14,8 +14,8 @@ bool doSleep = true;
 
 
 b2World *world = new b2World(gravity);
-b2BodyDef groundBodyDef,MainAgentDef;
-b2Body *MainAgent;
+b2BodyDef groundBodyDef,MainAgentDef,camBodyDef;
+b2Body *MainAgent, *camBody;
 b2PolygonShape groundBox,MainAgentShape;
 b2FixtureDef MainAgentFixtureDef;
 b2Fixture *MainAgentFixture;
@@ -46,7 +46,16 @@ int main(int argc, char** argv) {
 	// box2d functions
 
 
-	m_move *moveTest = new m_move();
+	// Camera init
+	camBodyDef.position.Set(X_AXIS_SIZE/2,Y_AXIS_SIZE/2);
+	camBodyDef.type = b2_dynamicBody;
+	m_move *camData = new m_move(CAMERA);
+	camBody = world->CreateBody(&camBodyDef);
+	camBody->SetUserData(camData);
+
+
+
+	m_move *moveTest = new m_move(MAIN_AGENT);
 	moveTest->m_state[X_AXIS] = moveTest->m_state[Y_AXIS] = MS_STOP;
 	// Creating the body
 	MainAgentDef.position.Set(X_AXIS_SIZE/2,Y_AXIS_SIZE/2);
@@ -73,6 +82,7 @@ int main(int argc, char** argv) {
 	drawclass.SetFlags(1);
 	world->SetDebugDraw(&drawclass);
 
+
 	// Terrain loading
 	char terrainFile[] = "../maps/test.map";
 	ifstream terrainMap(terrainFile);
@@ -85,6 +95,8 @@ int main(int argc, char** argv) {
 	//cout << "passei!\n";
 
 
+
+
 	// Rendering
 	initScreen();
 	glutDisplayFunc(display);
@@ -92,6 +104,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
+int t=0;
 void display(void)
 {
 /*  clear all pixels  */
@@ -111,16 +124,20 @@ void display(void)
 		//cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << " " << ((m_move*)MainAgent->GetUserData())->m_state[Y_AXIS] << endl;
 
 
-		world->Step(timeStep, velocityIterations, positionIterations);
+
 		//cout << "passei\n";
 
 		// Simulator functions end here
 
 		// Camera operations
-		cam->checkForBorder(0.8,MainAgent);
+		//shiftCamera();
+
+
 
 		// End of Camera functions
 		glPopMatrix();
+		world->Step(timeStep, velocityIterations, positionIterations);
+
 		glutPostRedisplay();
 		glutSwapBuffers();
 

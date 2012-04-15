@@ -15,9 +15,12 @@ class m_move {
 	    MS_LEFT,
 	    MS_RIGHT,
 	  };
+
 public:
+
 	int m_state[2];
-	m_move();
+	int bodyType;
+	m_move(int type);
 };
 
 #endif /* M_MOVE_H_ */

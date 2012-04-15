@@ -7,6 +7,7 @@
 
 #include "../inc.h"
 
-m_move::m_move() {
+m_move::m_move(int type) {
 	m_state[X_AXIS] = m_state[Y_AXIS] = 0;
+	bodyType = type;
 };

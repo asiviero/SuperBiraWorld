@@ -7,25 +7,6 @@
 
 #include "../inc.h"
 
-void *timer(void *ag) {
-
-		cout << "timer on!" << endl;
-		clock_t endwait;
-		b2Body *agent = (b2Body*)ag;
-		m_move *mvtmp = new m_move();
-		mvtmp->m_state[X_AXIS] = MS_RIGHT;
-		agent->SetUserData(mvtmp);
-
-
-		endwait = clock () + 0.1 * CLOCKS_PER_SEC;
-
-	  	while (clock() < endwait);
-	  	cout << "timer out!" << endl;
-	  	mvtmp->m_state[X_AXIS] = MS_STOP;
-	  	agent->SetUserData(mvtmp);
-	  	delete mvtmp;
-	  	return NULL;
-}
 
 /*void *moveAgentLeftThread(void *ag) {
 
