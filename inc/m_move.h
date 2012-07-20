@@ -19,6 +19,7 @@ class m_move {
 public:
 
 	int m_state[2];
+	bool isJumping;
 	int bodyType;
 	m_move(int type);
 };

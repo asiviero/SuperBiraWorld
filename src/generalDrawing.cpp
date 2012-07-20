@@ -19,16 +19,16 @@ void drawGrid() {
 		floatGridMarker = i*(X_AXIS_SIZE/HORIZONTAL_GRID_LINES);
 		glColor3f(0,0,0);
 		glBegin(GL_LINE);
-			glVertex2f(floatGridMarker,Y_AXIS_SIZE);
-			glVertex2f(floatGridMarker,0);
+			glVertex2f(floatGridMarker,1e7);
+			glVertex2f(floatGridMarker,-1e7);
 		glEnd();
 	}
 	for(int i=0;i<VERTICAL_GRID_LINES;i++) {
 		floatGridMarker = i*(Y_AXIS_SIZE/VERTICAL_GRID_LINES);
 		glColor3f(0,0,0);
 		glBegin(GL_LINE);
-			glVertex2f(X_AXIS_SIZE,floatGridMarker);
-			glVertex2f(0,floatGridMarker);
+			glVertex2f(1e7,floatGridMarker);
+			glVertex2f(-1e7,floatGridMarker);
 		glEnd();
 	}
 }

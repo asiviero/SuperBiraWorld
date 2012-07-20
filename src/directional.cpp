@@ -44,7 +44,12 @@ void *timerJump(void *ag) {
 	b2Body *agent = (b2Body*)ag;
 	m_move *currentmv;
 	currentmv = (m_move*)agent->GetUserData();
-	currentmv->m_state[Y_AXIS] = MS_UP;
+
+	if(currentmv->isJumping == false) {
+		currentmv->m_state[Y_AXIS] = MS_UP;
+		currentmv->isJumping = true;
+	}
+	else return NULL;
 
 	endwait = clock () + AGENT_FORCE_TIME_Y * CLOCKS_PER_SEC;
 

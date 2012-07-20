@@ -6,6 +6,7 @@
 CPP_SRCS += \
 ../src/agent.cpp \
 ../src/bounce.cpp \
+../src/camera.cpp \
 ../src/directional.cpp \
 ../src/friction.cpp \
 ../src/generalDrawing.cpp \
@@ -18,6 +19,7 @@ CPP_SRCS += \
 OBJS += \
 ./src/agent.o \
 ./src/bounce.o \
+./src/camera.o \
 ./src/directional.o \
 ./src/friction.o \
 ./src/generalDrawing.o \
@@ -30,6 +32,7 @@ OBJS += \
 CPP_DEPS += \
 ./src/agent.d \
 ./src/bounce.d \
+./src/camera.d \
 ./src/directional.d \
 ./src/friction.d \
 ./src/generalDrawing.d \

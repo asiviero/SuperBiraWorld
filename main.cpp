@@ -14,13 +14,11 @@ bool doSleep = true;
 
 
 b2World *world = new b2World(gravity);
-b2BodyDef groundBodyDef,MainAgentDef,camBodyDef;
-b2Body *MainAgent, *camBody;
+b2BodyDef groundBodyDef,MainAgentDef;
+b2Body *MainAgent;
 b2PolygonShape groundBox,MainAgentShape;
 b2FixtureDef MainAgentFixtureDef;
 b2Fixture *MainAgentFixture;
-
-camera *cam = new camera();
 
 
 float32 timeStep = 1/20.0;      //the length of time passed to simulate (seconds)
@@ -44,15 +42,6 @@ int main(int argc, char** argv) {
 	glutSpecialFunc(specialKeysHandler);
 
 	// box2d functions
-
-
-	// Camera init
-	camBodyDef.position.Set(X_AXIS_SIZE/2,Y_AXIS_SIZE/2);
-	camBodyDef.type = b2_dynamicBody;
-	m_move *camData = new m_move(CAMERA);
-	camBody = world->CreateBody(&camBodyDef);
-	camBody->SetUserData(camData);
-
 
 
 	m_move *moveTest = new m_move(MAIN_AGENT);
@@ -111,21 +100,13 @@ void display(void)
 
 		glClear (GL_COLOR_BUFFER_BIT);
 		glPushMatrix();
+
 		// Simulator functions begin here
 		drawGrid();
-		//mainAgent->drawAgent();		mainAgent->moveAgent();
 
-		//cout << "Agent Move: " << MainAgent-> << endl;
 		// Draws every object in the world
 
 		world->DrawDebugData();
-
-		//cout << "passei\n";
-		//cout << ((m_move*)MainAgent->GetUserData())->m_state[X_AXIS] << " " << ((m_move*)MainAgent->GetUserData())->m_state[Y_AXIS] << endl;
-
-
-
-		//cout << "passei\n";
 
 		// Simulator functions end here
 
