@@ -69,47 +69,6 @@ int main(int argc, char** argv) {
 	MainAgent->ResetMassData();
 
 
-
-	/*
-	 * Testing the creation of an enemy
-	 */
-
-	float enemyInitialPosition[2] = {0.75*X_AXIS_SIZE,50};
-	float enemySpan[2] = {SMALL_SPAN,0};
-	cout << enemyInitialPosition[X_AXIS] << " " << enemyInitialPosition[Y_AXIS] << endl;
-	enemyData *enemyDataTest = new enemyData(enemyInitialPosition,enemySpan,SLOW_ENEMY,X_AXIS);
-	agentData *enemyDataA;
-	enemyDataA = new agentData(ENEMY,enemyDataTest);
-
-
-	// Creating the body
-	enemyDef.position.Set(enemyInitialPosition[X_AXIS],enemyInitialPosition[Y_AXIS]);
-	enemyDef.type = b2_dynamicBody;
-
-
-	enemyTest = world->CreateBody(&enemyDef);
-	enemyTest->SetUserData(enemyDataA);
-
-	// Creates a box, which is to be featured in the agent body
-	enemyShape.SetAsBox(3,3);
-	enemyFixtureDef.friction = 0.1;
-	enemyFixtureDef.density = 0.1;
-	enemyFixtureDef.restitution = 0;
-	enemyFixtureDef.shape = &enemyShape;
-
-	enemyTest->CreateFixture(&enemyFixtureDef);
-	enemyTest->ResetMassData();
-
-	b2Vec2 enemyInitialVelocity;
-	enemyInitialVelocity.x = SLOW_ENEMY;
-	enemyInitialVelocity.y = 0;
-	enemyTest->SetLinearVelocity(enemyInitialVelocity);
-
-	// Test ends here, it will be removed sometime in favor of something similar to terrain loading
-
-
-
-
 	// Sets the class used for debug drawing. It came from Box2d testbed
 	DebugDraw drawclass = DebugDraw();
 	drawclass.SetFlags(1);
@@ -127,7 +86,16 @@ int main(int argc, char** argv) {
 	terrainMap.close();
 	//cout << "passei!\n";
 
-
+	// Enemy loading
+	char enemyFile[] = "../enemy/enemytest.ene";
+	ifstream enemyFileStream(enemyFile);
+	//cout << "passei!\n";
+	if(enemyFileStream.is_open()) {
+		//cout << "map file loaded succesfully, passing it on to function\n";
+		loadEnemies(enemyFileStream,world);
+	}
+	enemyFileStream.close();
+	//cout << "passei!\n";
 
 
 	// Rendering

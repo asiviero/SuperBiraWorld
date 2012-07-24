@@ -15,4 +15,5 @@ enemyData::enemyData(float initialPosition[2], float span[2], float speedCoeffic
 	fSpeedCoefficient = speedCoefficient;
 	intMovementDirection = movementDirection;
 	goingForward = true;
+	isJumping = true;
 }

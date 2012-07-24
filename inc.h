@@ -38,6 +38,7 @@ using namespace std;
 #include "inc/camera.h"
 #include "inc/enemyData.h"
 #include "inc/agentData.h"
+#include "inc/enemy.h"
 
 #include "Render.h"
 

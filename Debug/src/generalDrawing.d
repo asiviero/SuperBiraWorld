@@ -4,7 +4,8 @@ src/generalDrawing.d src/generalDrawing.o: ../src/generalDrawing.cpp \
  ../src/../inc/agent.h ../src/../inc/timer.h ../src/../inc/list.h \
  ../src/../inc/terrain.h ../src/../inc/../inc.h ../src/../inc/m_move.h \
  ../src/../inc/directional.h ../src/../inc/camera.h \
- ../src/../inc/enemyData.h ../src/../inc/agentData.h ../src/../Render.h
+ ../src/../inc/enemyData.h ../src/../inc/agentData.h \
+ ../src/../inc/enemy.h ../src/../Render.h
 
 ../src/../inc.h:
 
@@ -35,5 +36,7 @@ src/generalDrawing.d src/generalDrawing.o: ../src/generalDrawing.cpp \
 ../src/../inc/enemyData.h:
 
 ../src/../inc/agentData.h:
+
+../src/../inc/enemy.h:
 
 ../src/../Render.h:

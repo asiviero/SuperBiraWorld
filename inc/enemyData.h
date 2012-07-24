@@ -15,6 +15,7 @@ class enemyData {
 		float fSpan[2];
 		float fSpeedCoefficient;
 		int intMovementDirection;
+		bool isJumping;
 		enemyData(float initialPosition[2], float span[2], float speedCoefficient, int movementDirection);
 };
 

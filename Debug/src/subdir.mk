@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../src/bounce.cpp \
 ../src/camera.cpp \
 ../src/directional.cpp \
+../src/enemy.cpp \
 ../src/enemyData.cpp \
 ../src/friction.cpp \
 ../src/generalDrawing.cpp \
@@ -24,6 +25,7 @@ OBJS += \
 ./src/bounce.o \
 ./src/camera.o \
 ./src/directional.o \
+./src/enemy.o \
 ./src/enemyData.o \
 ./src/friction.o \
 ./src/generalDrawing.o \
@@ -39,6 +41,7 @@ CPP_DEPS += \
 ./src/bounce.d \
 ./src/camera.d \
 ./src/directional.d \
+./src/enemy.d \
 ./src/enemyData.d \
 ./src/friction.d \
 ./src/generalDrawing.d \

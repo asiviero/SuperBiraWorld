@@ -1046,16 +1046,42 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 
 				enemyCurrentVelocity.x = eD->fSpeedCoefficient*direction;
 				enemyCurrentPosition = body->GetPosition();
+				//cout << (body->GetPosition())(Y_AXIS) << endl;
 
-				if((enemyCurrentPosition.x > (eD->fInitialPosition[X_AXIS] + eD->fSpan[X_AXIS]/2)) && eD->goingForward == true) {
+				if(
+					// Enemy reached his ending point going forward
+					((enemyCurrentPosition.x > (eD->fInitialPosition[X_AXIS] + eD->fSpan[X_AXIS]/2)) && eD->goingForward == true)
+					// or
+					||
+					// Enemy reached his ending point going backward
+					((enemyCurrentPosition.x < (eD->fInitialPosition[X_AXIS] - eD->fSpan[X_AXIS]/2)) && eD->goingForward == false)
+
+					) {
 					enemyCurrentVelocity.x *= -1;
-					eD->goingForward = false;
+					eD->goingForward = !eD->goingForward;
 				}
 
-				if((enemyCurrentPosition.x < (eD->fInitialPosition[X_AXIS] - eD->fSpan[X_AXIS]/2)) && eD->goingForward == false) {
-					enemyCurrentVelocity.x *= -1;
-					eD->goingForward = true;
-				}
+				body->SetLinearVelocity(enemyCurrentVelocity);
+				//continue;
+			}
+			if(eD->intMovementDirection == Y_AXIS) { // Jumpers
+
+				b2Vec2 enemyCurrentPosition,enemyCurrentVelocity;
+				enemyCurrentVelocity.x = 0;
+				enemyCurrentPosition = body->GetPosition();
+
+				// Checking if it needs to be pushed up or not
+				if(enemyCurrentPosition.y - eD->fInitialPosition[Y_AXIS] < 1e-3)
+					eD->isJumping = true;
+				if(((eD->fInitialPosition[Y_AXIS] + eD->fSpan[Y_AXIS]) - enemyCurrentPosition.y) < 1e-3)
+					eD->isJumping = false;
+
+				// Applying Speed
+				if(eD->isJumping)
+					enemyCurrentVelocity.y = eD->fSpeedCoefficient;
+				else
+					enemyCurrentVelocity.y = (body->GetLinearVelocity())(Y_AXIS);
+
 
 				body->SetLinearVelocity(enemyCurrentVelocity);
 			}
