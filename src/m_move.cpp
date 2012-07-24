@@ -12,3 +12,11 @@ m_move::m_move(int type) {
 	bodyType = type;
 	isJumping = false;
 };
+
+/*m_move::m_move(int type) {
+	m_state[X_AXIS] = m_state[Y_AXIS] = 0;
+	bodyType = type;
+	isJumping = false;
+};
+
+*/

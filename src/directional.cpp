@@ -12,7 +12,7 @@ void *timerMoveRight(void *ag) {
 	clock_t endwait;
 	b2Body *agent = (b2Body*)ag;
 	m_move *currentmv;
-	currentmv = (m_move*)agent->GetUserData();
+	currentmv = (m_move*)((agentData*)(agent->GetUserData()))->getUserData();
 	currentmv->m_state[X_AXIS] = MS_RIGHT;
 
 	endwait = clock () + AGENT_FORCE_TIME_X * CLOCKS_PER_SEC;
@@ -27,7 +27,7 @@ void *timerMoveLeft(void *ag) {
 	clock_t endwait;
 	b2Body *agent = (b2Body*)ag;
 	m_move *currentmv;
-	currentmv = (m_move*)agent->GetUserData();
+	currentmv = (m_move*)((agentData*)(agent->GetUserData()))->getUserData();
 	currentmv->m_state[X_AXIS] = MS_LEFT;
 
 	endwait = clock () + AGENT_FORCE_TIME_X * CLOCKS_PER_SEC;
@@ -43,7 +43,7 @@ void *timerJump(void *ag) {
 	clock_t endwait;
 	b2Body *agent = (b2Body*)ag;
 	m_move *currentmv;
-	currentmv = (m_move*)agent->GetUserData();
+	currentmv = (m_move*)((agentData*)(agent->GetUserData()))->getUserData();
 
 	if(currentmv->isJumping == false) {
 		currentmv->m_state[Y_AXIS] = MS_UP;

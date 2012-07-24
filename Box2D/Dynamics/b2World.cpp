@@ -16,7 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include "../../inc/agentData.h"
 #include "../../inc/m_move.h"
+#include "../../inc/enemyData.h"
 #include "../../inc/constants.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -980,9 +982,11 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 	    MS_LEFT,
 	    MS_RIGHT,
 	  };
+	int i=0;
 	b2Vec2 vel;
 	b2Body *body = NULL,*mainAgent = NULL;
 	//cout << "passei2\n";
+	//cout << this->GetBodyCount() << endl;
 	for(body = GetBodyList();body!=NULL;body=body->GetNext()) {
 		if(body->GetType()!=b2_dynamicBody) continue;
 	/*
@@ -991,39 +995,75 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 	 * nothing is pushed
 	 */
 
-		m_move *t = static_cast<m_move*>(body->GetUserData());
-		if(t->bodyType == MAIN_AGENT) {
-			mainAgent = body;
-			switch(t->m_state[X_AXIS]) {
-				  case MS_LEFT:  vel.x = -20; break;
-				  case MS_STOP:  vel.x =  (body->GetLinearVelocity())(X_AXIS);; break;
-				  case MS_RIGHT: vel.x =  20; break;
-			}
-			if(t->m_state[Y_AXIS]==MS_UP) {
-				vel.y = 10;
-			}
-			else {
-				vel.y = (body->GetLinearVelocity())(Y_AXIS);
-				// floating point precision requires that a little tolerance is used instead of going 0
-				if(abs(vel.y) < 1e-3) t->isJumping = false;
-			}
-			body->SetLinearVelocity(vel);
+		agentData *agentD = static_cast<agentData*>(body->GetUserData());
+		if(agentD->agentType == MAIN_AGENT) {
+				//cout << "I'm here\n";
+				m_move *t = static_cast<m_move*>(agentD->getUserData());
+				mainAgent = body;
+				switch(t->m_state[X_AXIS]) {
+					  case MS_LEFT:  vel.x = -20; break;
+					  case MS_STOP:  vel.x =  (body->GetLinearVelocity())(X_AXIS);; break;
+					  case MS_RIGHT: vel.x =  20; break;
+				}
+				if(t->m_state[Y_AXIS]==MS_UP) {
+					vel.y = 10;
+				}
+				else {
+					vel.y = (body->GetLinearVelocity())(Y_AXIS);
+					// floating point precision requires that a little tolerance is used instead of going 0
+					if(abs(vel.y) < 1e-3) t->isJumping = false;
+				}
+				body->SetLinearVelocity(vel);
 
-			// Setting the camera - Main Agent always at the center
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			gluLookAt(
-					(body->GetPosition())(X_AXIS)-X_AXIS_SIZE/2,0,10,
-					(body->GetPosition())(X_AXIS)-X_AXIS_SIZE/2,0,0,
-					0,1,0
-			);
+				// Setting the camera - Main Agent always at the center
+				glMatrixMode(GL_MODELVIEW);
+				glLoadIdentity();
+				gluLookAt(
+						(body->GetPosition())(X_AXIS)-X_AXIS_SIZE/2,0,10,
+						(body->GetPosition())(X_AXIS)-X_AXIS_SIZE/2,0,0,
+						0,1,0
+				);
 
-			continue;
+				continue;
+
+		// End of Main Agent movement
 		}
-	// End of Main Agent movement
+
+		/*
+		 * This block is responsible for moving the enemies around
+		 */
+
+
+		if(agentD->agentType == ENEMY) {
+			enemyData *eD = static_cast<enemyData*>(agentD->getUserData());
+			// Horizontal movement
+			if(eD->intMovementDirection == X_AXIS) {
+				//cout << "ok\n";
+				b2Vec2 enemyCurrentPosition,enemyCurrentVelocity;
+				enemyCurrentVelocity = body->GetLinearVelocity();
+
+				int direction = abs(enemyCurrentVelocity.x)/enemyCurrentVelocity.x;
+
+				enemyCurrentVelocity.x = eD->fSpeedCoefficient*direction;
+				enemyCurrentPosition = body->GetPosition();
+
+				if((enemyCurrentPosition.x > (eD->fInitialPosition[X_AXIS] + eD->fSpan[X_AXIS]/2)) && eD->goingForward == true) {
+					enemyCurrentVelocity.x *= -1;
+					eD->goingForward = false;
+				}
+
+				if((enemyCurrentPosition.x < (eD->fInitialPosition[X_AXIS] - eD->fSpan[X_AXIS]/2)) && eD->goingForward == false) {
+					enemyCurrentVelocity.x *= -1;
+					eD->goingForward = true;
+				}
+
+				body->SetLinearVelocity(enemyCurrentVelocity);
+			}
+		}
 
 	// end for
 	}
+	//sleep(1);
 
 }
 

@@ -21,6 +21,9 @@ using namespace std;
 #include <GL/gl.h>
 #include <GL/glut.h>
 
+#include <Box2D/Box2D.h>
+
+
 // User Libs
 #include "inc/constants.h"
 #include "inc/friction.h"
@@ -33,10 +36,11 @@ using namespace std;
 #include "inc/m_move.h"
 #include "inc/directional.h"
 #include "inc/camera.h"
+#include "inc/enemyData.h"
+#include "inc/agentData.h"
 
 #include "Render.h"
 
-#include <Box2D/Box2D.h>
 
 enum _moveState {
     MS_STOP,

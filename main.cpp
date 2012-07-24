@@ -14,11 +14,11 @@ bool doSleep = true;
 
 
 b2World *world = new b2World(gravity);
-b2BodyDef groundBodyDef,MainAgentDef;
-b2Body *MainAgent;
-b2PolygonShape groundBox,MainAgentShape;
-b2FixtureDef MainAgentFixtureDef;
-b2Fixture *MainAgentFixture;
+b2BodyDef groundBodyDef,MainAgentDef,enemyDef;
+b2Body *MainAgent, *enemyTest;
+b2PolygonShape groundBox,MainAgentShape,enemyShape;
+b2FixtureDef MainAgentFixtureDef,enemyFixtureDef;
+b2Fixture *MainAgentFixture,*enemyFixture;
 
 
 float32 timeStep = 1/20.0;      //the length of time passed to simulate (seconds)
@@ -45,13 +45,15 @@ int main(int argc, char** argv) {
 
 
 	m_move *moveTest = new m_move(MAIN_AGENT);
-	moveTest->m_state[X_AXIS] = moveTest->m_state[Y_AXIS] = MS_STOP;
+
+	agentData *biraData;
+	biraData = new agentData(MAIN_AGENT,(void*)moveTest);
 	// Creating the body
 	MainAgentDef.position.Set(X_AXIS_SIZE/2,Y_AXIS_SIZE/2);
 	MainAgentDef.type = b2_dynamicBody;
 
 	MainAgent = world->CreateBody(&MainAgentDef);
-	MainAgent->SetUserData(moveTest);
+	MainAgent->SetUserData(biraData);
 
 	// Creates a box, which is to be featured in the agent body
 	MainAgentShape.SetAsBox(4,4);
@@ -65,6 +67,48 @@ int main(int argc, char** argv) {
 	// Applies it
 	MainAgent->CreateFixture(&MainAgentFixtureDef);
 	MainAgent->ResetMassData();
+
+
+
+	/*
+	 * Testing the creation of an enemy
+	 */
+
+	float enemyInitialPosition[2] = {0.75*X_AXIS_SIZE,50};
+	float enemySpan[2] = {SMALL_SPAN,0};
+	cout << enemyInitialPosition[X_AXIS] << " " << enemyInitialPosition[Y_AXIS] << endl;
+	enemyData *enemyDataTest = new enemyData(enemyInitialPosition,enemySpan,SLOW_ENEMY,X_AXIS);
+	agentData *enemyDataA;
+	enemyDataA = new agentData(ENEMY,enemyDataTest);
+
+
+	// Creating the body
+	enemyDef.position.Set(enemyInitialPosition[X_AXIS],enemyInitialPosition[Y_AXIS]);
+	enemyDef.type = b2_dynamicBody;
+
+
+	enemyTest = world->CreateBody(&enemyDef);
+	enemyTest->SetUserData(enemyDataA);
+
+	// Creates a box, which is to be featured in the agent body
+	enemyShape.SetAsBox(3,3);
+	enemyFixtureDef.friction = 0.1;
+	enemyFixtureDef.density = 0.1;
+	enemyFixtureDef.restitution = 0;
+	enemyFixtureDef.shape = &enemyShape;
+
+	enemyTest->CreateFixture(&enemyFixtureDef);
+	enemyTest->ResetMassData();
+
+	b2Vec2 enemyInitialVelocity;
+	enemyInitialVelocity.x = SLOW_ENEMY;
+	enemyInitialVelocity.y = 0;
+	enemyTest->SetLinearVelocity(enemyInitialVelocity);
+
+	// Test ends here, it will be removed sometime in favor of something similar to terrain loading
+
+
+
 
 	// Sets the class used for debug drawing. It came from Box2d testbed
 	DebugDraw drawclass = DebugDraw();

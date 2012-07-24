@@ -48,6 +48,7 @@
 #define X_AXIS 0
 #define Y_AXIS 1
 #define Z_AXIS 2
+#define X_AND_Y_AXIS 4
 
 // Constants used in color vectors
 #define RED_PCT 0
@@ -86,7 +87,15 @@
 
 // Object types
 #define MAIN_AGENT 0
-#define CAMERA 1
+#define ENEMY 1
+
+
+// Speed Coefficients
+#define SLOW_ENEMY 1
+
+
+// Span Constants
+#define SMALL_SPAN 10
 
 // Camera tolerance
 #define CAMERA_LIMIT 0.8

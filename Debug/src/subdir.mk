@@ -5,9 +5,11 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/agent.cpp \
+../src/agentData.cpp \
 ../src/bounce.cpp \
 ../src/camera.cpp \
 ../src/directional.cpp \
+../src/enemyData.cpp \
 ../src/friction.cpp \
 ../src/generalDrawing.cpp \
 ../src/gravity.cpp \
@@ -18,9 +20,11 @@ CPP_SRCS += \
 
 OBJS += \
 ./src/agent.o \
+./src/agentData.o \
 ./src/bounce.o \
 ./src/camera.o \
 ./src/directional.o \
+./src/enemyData.o \
 ./src/friction.o \
 ./src/generalDrawing.o \
 ./src/gravity.o \
@@ -31,9 +35,11 @@ OBJS += \
 
 CPP_DEPS += \
 ./src/agent.d \
+./src/agentData.d \
 ./src/bounce.d \
 ./src/camera.d \
 ./src/directional.d \
+./src/enemyData.d \
 ./src/friction.d \
 ./src/generalDrawing.d \
 ./src/gravity.d \
