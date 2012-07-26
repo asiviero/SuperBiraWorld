@@ -21,7 +21,7 @@ using namespace std;
 #include <GL/gl.h>
 #include <GL/glut.h>
 
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 
 
 // User Libs
@@ -39,6 +39,7 @@ using namespace std;
 #include "inc/enemyData.h"
 #include "inc/agentData.h"
 #include "inc/enemy.h"
+#include "inc/contactListener.h"
 
 #include "Render.h"
 
@@ -49,7 +50,5 @@ enum _moveState {
     MS_LEFT,
     MS_RIGHT,
   };
-
-
 
 #endif /* INC_H_ */

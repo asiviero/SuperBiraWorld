@@ -10,6 +10,7 @@
 agentData::agentData(int aType, void *aData) {
 	agentType = aType;
 	userData = aData;
+	scheduledForDestruction = false;
 }
 
 void *agentData::getUserData() {

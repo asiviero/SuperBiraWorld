@@ -7,11 +7,12 @@
 
 #include "inc.h"
 
+#include <pthread.h>
+bool keySpecialStates[246];
+
 
 b2Vec2 gravity(0.0f,-9.7f);
 bool doSleep = true;
-
-
 
 b2World *world = new b2World(gravity);
 b2BodyDef groundBodyDef,MainAgentDef,enemyDef;
@@ -29,6 +30,8 @@ void display(void);
 void loadTerrain(ifstream &map,b2World *world);
 
 int main(int argc, char** argv) {
+
+
 	// Init GLUT and create window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB);
@@ -38,8 +41,12 @@ int main(int argc, char** argv) {
 	intMainWindowID = glutCreateWindow("Super Bira World");
 
 	// Handler Functions
+	initializeKeySpecialStates();
 	glutKeyboardFunc(keyboardHandler);
 	glutSpecialFunc(specialKeysHandler);
+	glutSpecialUpFunc(specialKeysUpHandler);
+
+
 
 	// box2d functions
 
@@ -73,6 +80,9 @@ int main(int argc, char** argv) {
 	DebugDraw drawclass = DebugDraw();
 	drawclass.SetFlags(1);
 	world->SetDebugDraw(&drawclass);
+
+	superBiraWorldContactListener *listener = new superBiraWorldContactListener();
+	world->SetContactListener(listener);
 
 
 	// Terrain loading
@@ -122,48 +132,25 @@ void display(void)
 
 		// Simulator functions end here
 
-		// Camera operations
-		//shiftCamera();
-
-
-
-		// End of Camera functions
 		glPopMatrix();
+
 		world->Step(timeStep, velocityIterations, positionIterations);
 
 		glutPostRedisplay();
 		glutSwapBuffers();
 
+		//cout << "Directionals:\nUp: " << keySpecialStates[GLUT_KEY_UP] << "\nDown: " << keySpecialStates[GLUT_KEY_DOWN]
+		  //       << "\nLeft: " << keySpecialStates[GLUT_KEY_LEFT] << "\nRight: " << keySpecialStates[GLUT_KEY_RIGHT] << endl;
+}
+
+
+
+void initializeKeySpecialStates() {
+	for(int i=0; i<246; i++) keySpecialStates[i] = false;
 }
 
 void specialKeysHandler(int button, int x, int y) {
-
-	switch(button) {
-		case GLUT_KEY_UP:
-			pthread_t timerThreadUp;
-			//if(mainAgent->floatAgentPosition[Y_AXIS] <=0) mainAgent->setMoveDirectional(UP_CONSTANT,INTENTION);
-			pthread_create(&timerThreadUp,NULL,timerJump,MainAgent);
-			//mainAgent->setMoveDirectional(UP_CONSTANT,MOVEMENT);
-			break;
-		case GLUT_KEY_DOWN:
-			//mainAgent->setMoveDirectional(DOWN_CONSTANT,MOVEMENT);
-			break;
-		case GLUT_KEY_LEFT:
-			pthread_t timerThreadLeft;
-			pthread_create(&timerThreadLeft,NULL,timerMoveLeft,MainAgent);
-			break;
-		case GLUT_KEY_RIGHT:
-			pthread_t timerThreadRight;
-			pthread_create(&timerThreadRight,NULL,timerMoveRight,MainAgent);
-			break;
-		case GLUT_KEY_END:
-			//mainAgent->resetForces(X_AXIS);
-			//mainAgent->resetForces(Y_AXIS);
-			break;
-		default:
-			break;
-			//mainAgent->setMoveDirectional(NULL,NULL);
-	}
+	keySpecialStates[button] = true;
 }
 
 void keyboardHandler(unsigned char button, int x, int y) {
@@ -171,13 +158,38 @@ void keyboardHandler(unsigned char button, int x, int y) {
 		case ESC_KEY:
 			exit(0);
 			break;
-		case 's':
-		pthread_t timerThreadUp;
-		//if(mainAgent->floatAgentPosition[Y_AXIS] <=0) mainAgent->setMoveDirectional(UP_CONSTANT,INTENTION);
-		//pthread_create(&timerThreadUp,NULL,timer,mainAgent);
-		//mainAgent->setMoveDirectional(UP_CONSTANT,MOVEMENT);
 		break;
 	}
 
 }
 
+void specialKeysUpHandler(int button, int x, int y) {
+	keySpecialStates[button] = false;
+}
+
+void performSpecialKeyOperations() {
+
+	m_move *currentmv;
+	currentmv = (m_move*)((agentData*)(MainAgent->GetUserData()))->getUserData();
+
+	if(keySpecialStates[GLUT_KEY_UP] && currentmv->isJumping == false) {
+		currentmv->m_state[Y_AXIS] = MS_UP;
+		currentmv->isJumping = true;
+	}
+	else {
+		currentmv->m_state[Y_AXIS] = MS_STOP;
+	}
+
+
+	if(keySpecialStates[GLUT_KEY_LEFT]) {
+		currentmv->m_state[X_AXIS] = MS_LEFT;
+	}
+
+	if(keySpecialStates[GLUT_KEY_RIGHT]) {
+		currentmv->m_state[X_AXIS] = MS_RIGHT;
+	}
+
+	if(keySpecialStates[GLUT_KEY_LEFT] == keySpecialStates[GLUT_KEY_RIGHT]) {
+		currentmv->m_state[X_AXIS] = MS_STOP;
+	}
+}

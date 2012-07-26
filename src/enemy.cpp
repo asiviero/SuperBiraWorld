@@ -10,7 +10,6 @@
 void loadEnemies(ifstream &enemyFile, b2World *world) {
 	int nEnemies = 0;
 	enemyFile >> nEnemies;
-	cout << "Number of Enemies: " << nEnemies << endl;
 
 	float enemyInitialPosition[2], enemySpan[2], speedCoefficient;
 	int movementDirection;

@@ -20,6 +20,8 @@
 #include "../../inc/m_move.h"
 #include "../../inc/enemyData.h"
 #include "../../inc/constants.h"
+#include "../../inc/userInput.h"
+
 #include <GL/gl.h>
 #include <GL/glut.h>
 
@@ -982,11 +984,12 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 	    MS_LEFT,
 	    MS_RIGHT,
 	  };
-	int i=0;
+
 	b2Vec2 vel;
 	b2Body *body = NULL,*mainAgent = NULL;
-	//cout << "passei2\n";
-	//cout << this->GetBodyCount() << endl;
+	performSpecialKeyOperations();
+
+
 	for(body = GetBodyList();body!=NULL;body=body->GetNext()) {
 		if(body->GetType()!=b2_dynamicBody) continue;
 	/*
@@ -1000,13 +1003,15 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 				//cout << "I'm here\n";
 				m_move *t = static_cast<m_move*>(agentD->getUserData());
 				mainAgent = body;
+
+				//cout << "X: " << t->m_state[X_AXIS] << " Y: " << t->m_state[Y_AXIS] << endl;
 				switch(t->m_state[X_AXIS]) {
-					  case MS_LEFT:  vel.x = -20; break;
+					  case MS_LEFT:  vel.x = -MAIN_AGENT_SPEED; break;
 					  case MS_STOP:  vel.x =  (body->GetLinearVelocity())(X_AXIS);; break;
-					  case MS_RIGHT: vel.x =  20; break;
+					  case MS_RIGHT: vel.x =  MAIN_AGENT_SPEED; break;
 				}
 				if(t->m_state[Y_AXIS]==MS_UP) {
-					vel.y = 10;
+					vel.y = MAIN_AGENT_SPEED*2;
 				}
 				else {
 					vel.y = (body->GetLinearVelocity())(Y_AXIS);
@@ -1035,6 +1040,10 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 
 
 		if(agentD->agentType == ENEMY) {
+			if(agentD->scheduledForDestruction == true) {
+				DestroyBody(body);
+				continue;
+			}
 			enemyData *eD = static_cast<enemyData*>(agentD->getUserData());
 			// Horizontal movement
 			if(eD->intMovementDirection == X_AXIS) {

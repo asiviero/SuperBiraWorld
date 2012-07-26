@@ -8,7 +8,7 @@
 #include "../inc.h"
 
 void *timerMoveRight(void *ag) {
-
+	cout << "timer on Right! \n";
 	clock_t endwait;
 	b2Body *agent = (b2Body*)ag;
 	m_move *currentmv;
@@ -19,11 +19,14 @@ void *timerMoveRight(void *ag) {
 
   	while (clock() < endwait);
   	currentmv->m_state[X_AXIS] = MS_STOP;
+
+	cout << "timer off Right! \n";
+
   	return NULL;
 }
 
 void *timerMoveLeft(void *ag) {
-
+	cout << "timer on Left! \n";
 	clock_t endwait;
 	b2Body *agent = (b2Body*)ag;
 	m_move *currentmv;
@@ -34,12 +37,15 @@ void *timerMoveLeft(void *ag) {
 
   	while (clock() < endwait);
   	currentmv->m_state[X_AXIS] = MS_STOP;
+
+	cout << "timer off Left! \n";
+
   	return NULL;
 }
 
 void *timerJump(void *ag) {
 
-
+	cout << "timer on Up! \n";
 	clock_t endwait;
 	b2Body *agent = (b2Body*)ag;
 	m_move *currentmv;
@@ -56,5 +62,8 @@ void *timerJump(void *ag) {
   	while (clock() < endwait);
 
   	currentmv->m_state[Y_AXIS] = MS_STOP;
+
+	cout << "timer off Up! \n";
+
   	return NULL;
 }

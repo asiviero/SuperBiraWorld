@@ -88,9 +88,10 @@
 // Object types
 #define MAIN_AGENT 0
 #define ENEMY 1
-
+#define TERRAIN 2
 
 // Speed Coefficients
+#define MAIN_AGENT_SPEED 10
 #define SLOW_ENEMY 1
 
 

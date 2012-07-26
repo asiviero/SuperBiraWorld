@@ -18,6 +18,7 @@ void loadTerrain(ifstream &map,b2World *world) {
 	// Check for number of bodies in terrain
 	map >> intNBodiesOnTerrain;
 	for(int i=0;i<intNBodiesOnTerrain;i++) {
+		agentData *agentD = new agentData(TERRAIN,NULL);
 		// Check for number of vertices
 		map >> intNVertexPolygon;
 		// Initialize vector
@@ -36,5 +37,6 @@ void loadTerrain(ifstream &map,b2World *world) {
 		// attaching body to world and shape to body
 		body = world->CreateBody(&bodydef);
 		body->CreateFixture(&fixture);
+		body->SetUserData(agentD);
 	}
 }

@@ -12,6 +12,7 @@
 class agentData {
 	public:
 		int agentType;
+		bool scheduledForDestruction;
 		void *userData;
 		agentData(int aType, void *aData);
 		void *getUserData();

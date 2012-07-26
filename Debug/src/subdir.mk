@@ -8,6 +8,7 @@ CPP_SRCS += \
 ../src/agentData.cpp \
 ../src/bounce.cpp \
 ../src/camera.cpp \
+../src/contactListener.cpp \
 ../src/directional.cpp \
 ../src/enemy.cpp \
 ../src/enemyData.cpp \
@@ -24,6 +25,7 @@ OBJS += \
 ./src/agentData.o \
 ./src/bounce.o \
 ./src/camera.o \
+./src/contactListener.o \
 ./src/directional.o \
 ./src/enemy.o \
 ./src/enemyData.o \
@@ -40,6 +42,7 @@ CPP_DEPS += \
 ./src/agentData.d \
 ./src/bounce.d \
 ./src/camera.d \
+./src/contactListener.d \
 ./src/directional.d \
 ./src/enemy.d \
 ./src/enemyData.d \
