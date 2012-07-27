@@ -4,4 +4,4 @@
 
 USER_OBJS :=
 
-LIBS := -lm -lpthread -lGLU -lglut -lGL
+LIBS := -lm -lSDL_mixer -lpthread -lGLU -lglut -lGL

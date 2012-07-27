@@ -6,7 +6,8 @@ src/timer.d src/timer.o: ../src/timer.cpp ../src/../inc.h \
  ../src/../inc/../inc.h ../src/../inc/m_move.h \
  ../src/../inc/directional.h ../src/../inc/camera.h \
  ../src/../inc/enemyData.h ../src/../inc/agentData.h \
- ../src/../inc/enemy.h ../src/../inc/contactListener.h ../src/../Render.h
+ ../src/../inc/enemy.h ../src/../inc/contactListener.h \
+ ../src/../inc/sound.h ../src/../Render.h
 
 ../src/../inc.h:
 
@@ -43,5 +44,7 @@ src/timer.d src/timer.o: ../src/timer.cpp ../src/../inc.h \
 ../src/../inc/enemy.h:
 
 ../src/../inc/contactListener.h:
+
+../src/../inc/sound.h:
 
 ../src/../Render.h:

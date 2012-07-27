@@ -20,8 +20,11 @@ using namespace std;
 // Graphic Libs
 #include <GL/gl.h>
 #include <GL/glut.h>
-
 #include "Box2D/Box2D.h"
+
+// Sound Libs
+#include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
 
 // User Libs
@@ -40,6 +43,8 @@ using namespace std;
 #include "inc/agentData.h"
 #include "inc/enemy.h"
 #include "inc/contactListener.h"
+#include "inc/sound.h"
+
 
 #include "Render.h"
 

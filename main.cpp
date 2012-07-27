@@ -108,6 +108,10 @@ int main(int argc, char** argv) {
 	//cout << "passei!\n";
 
 
+	// Sound Functions
+	playBackgroundSound(NULL);
+
+
 	// Rendering
 	initScreen();
 	glutDisplayFunc(display);

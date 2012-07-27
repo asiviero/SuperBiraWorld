@@ -3,7 +3,7 @@ main.d main.o: ../main.cpp ../inc.h ../Box2D/Box2D.h ../inc/constants.h \
  ../inc/agent.h ../inc/timer.h ../inc/list.h ../inc/terrain.h \
  ../inc/../inc.h ../inc/m_move.h ../inc/directional.h ../inc/camera.h \
  ../inc/enemyData.h ../inc/agentData.h ../inc/enemy.h \
- ../inc/contactListener.h ../Render.h
+ ../inc/contactListener.h ../inc/sound.h ../Render.h
 
 ../inc.h:
 
@@ -40,5 +40,7 @@ main.d main.o: ../main.cpp ../inc.h ../Box2D/Box2D.h ../inc/constants.h \
 ../inc/enemy.h:
 
 ../inc/contactListener.h:
+
+../inc/sound.h:
 
 ../Render.h:
