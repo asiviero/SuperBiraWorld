@@ -21,6 +21,11 @@
 #include "../../inc/enemyData.h"
 #include "../../inc/constants.h"
 #include "../../inc/userInput.h"
+#include "../../inc/sound.h"
+
+
+
+Mix_Chunk *phaser=NULL;
 
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -1042,6 +1047,8 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 		if(agentD->agentType == ENEMY) {
 			if(agentD->scheduledForDestruction == true) {
 				DestroyBody(body);
+				phaser = Mix_LoadWAV("../VemUbirajara.wav");
+				playBackgroundSound(phaser);
 				continue;
 			}
 			enemyData *eD = static_cast<enemyData*>(agentD->getUserData());

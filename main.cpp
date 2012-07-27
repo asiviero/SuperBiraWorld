@@ -29,6 +29,10 @@ int32 positionIterations = 3;   //how strongly to correct position
 void display(void);
 void loadTerrain(ifstream &map,b2World *world);
 
+//Mix_Chunk *phaser = NULL;
+int phaserChannel = -1;
+
+
 int main(int argc, char** argv) {
 
 
@@ -109,7 +113,17 @@ int main(int argc, char** argv) {
 
 
 	// Sound Functions
-	playBackgroundSound(NULL);
+	prepareSoundDevice();
+	playBackgroundMusic("../Birao Cowboy.mp3");
+	//phaser = Mix_LoadWAV("../phaser.wav");
+
+
+
+
+	// Testing Shuffle
+	/*int randomteste[10];
+	for(int i=0;i<10;i++) randomteste[i] = [i];
+	random_*/
 
 
 	// Rendering
@@ -179,6 +193,7 @@ void performSpecialKeyOperations() {
 	if(keySpecialStates[GLUT_KEY_UP] && currentmv->isJumping == false) {
 		currentmv->m_state[Y_AXIS] = MS_UP;
 		currentmv->isJumping = true;
+		//playBackgroundSound(phaser);
 	}
 	else {
 		currentmv->m_state[Y_AXIS] = MS_STOP;

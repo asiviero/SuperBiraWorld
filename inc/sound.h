@@ -9,11 +9,14 @@
 #define SOUND_H_
 
 
-#include "../inc.h"
+//#include "../inc.h"
+// Sound Libs
+#include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
-void playBackgroundSound(char *soundName);
-
-void playBackgroundSound(char *soundName);
+void playBackgroundSound(Mix_Chunk *phaser);
+void prepareSoundDevice();
+void playBackgroundMusic(char *soundName);
 void musicDone();
 
 
