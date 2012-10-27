@@ -1,0 +1,9 @@
+This is a platform game based upon Box2D physics engine and for Linux platforms, with mostly academic purposes, and it requires Box2D, OpenGL and libsdl-mixer so far.
+
+Installing libsdl-mixer is fairly easy. In any Debian-based system it's an available package in the official apt repositories.
+
+For OpenGL, a quick an efficient installing guide can be found here: cacs.usc.edu/education/cs596/ogl_setup.pdf
+
+For Box2D, you have to go to http://code.google.com/p/box2d/ to download it and follow the installing instructions contained in the file "Building.txt". 
+
+After that, Makefile is available in the Debug folder. It's generated automatically by Eclipse.
