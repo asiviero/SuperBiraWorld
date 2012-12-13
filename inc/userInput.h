@@ -13,5 +13,8 @@ void specialKeysHandler(int button, int x, int y);
 void specialKeysUpHandler(int button, int x, int y);
 void initializeKeySpecialStates();
 void performSpecialKeyOperations();
+void initializeKeyStates();
+void keyboardUpHandler(unsigned char button, int x, int y);
+
 
 #endif /* USERINPUT_H_ */

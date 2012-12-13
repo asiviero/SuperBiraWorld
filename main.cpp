@@ -9,7 +9,8 @@
 
 #include <pthread.h>
 bool keySpecialStates[246];
-
+bool keyStates[255];
+void fsmFunction(void);
 
 b2Vec2 gravity(0.0f,-9.7f);
 bool doSleep = true;
@@ -26,16 +27,23 @@ float32 timeStep = 1/20.0;      //the length of time passed to simulate (seconds
 int32 velocityIterations = 6;   //how strongly to correct velocity
 int32 positionIterations = 3;   //how strongly to correct position
 
+gameScreenEnum gameScreen = Start_Screen;
+
 void display(void);
 void loadTerrain(ifstream &map,b2World *world);
 
 //Mix_Chunk *phaser = NULL;
 int phaserChannel = -1;
+/*int main() {
+	//printf("ok");
+	return 1;
+}
+*/
 
 
 int main(int argc, char** argv) {
 
-
+	//printf("ok");
 	// Init GLUT and create window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB);
@@ -46,14 +54,17 @@ int main(int argc, char** argv) {
 
 	// Handler Functions
 	initializeKeySpecialStates();
+	initializeKeyStates();
 	glutKeyboardFunc(keyboardHandler);
+	glutKeyboardUpFunc(keyboardUpHandler);
 	glutSpecialFunc(specialKeysHandler);
 	glutSpecialUpFunc(specialKeysUpHandler);
 
 
 
-	// box2d functions
 
+	// box2d functions
+/*
 
 	m_move *moveTest = new m_move(MAIN_AGENT);
 
@@ -114,7 +125,7 @@ int main(int argc, char** argv) {
 
 	// Sound Functions
 	prepareSoundDevice();
-	playBackgroundMusic("../Birao Cowboy.mp3");
+	playBackgroundMusic("../UbirajaraAparecendo.mp3");
 	//phaser = Mix_LoadWAV("../phaser.wav");
 
 
@@ -125,11 +136,16 @@ int main(int argc, char** argv) {
 	for(int i=0;i<10;i++) randomteste[i] = [i];
 	random_*/
 
-
+//printf("ok");
 	// Rendering
 	initScreen();
-	glutDisplayFunc(display);
+
+	//glutDisplayFunc(display);
+	glutDisplayFunc(fsmFunction);
+	char lixo;
+		//scanf("%c",&lixo);
 	glutMainLoop();
+
 	return 0;
 }
 
@@ -137,7 +153,7 @@ int t=0;
 void display(void)
 {
 /*  clear all pixels  */
-
+/*
 		glClear (GL_COLOR_BUFFER_BIT);
 		glPushMatrix();
 
@@ -155,7 +171,7 @@ void display(void)
 		world->Step(timeStep, velocityIterations, positionIterations);
 
 		glutPostRedisplay();
-		glutSwapBuffers();
+		glutSwapBuffers();*/
 
 		//cout << "Directionals:\nUp: " << keySpecialStates[GLUT_KEY_UP] << "\nDown: " << keySpecialStates[GLUT_KEY_DOWN]
 		  //       << "\nLeft: " << keySpecialStates[GLUT_KEY_LEFT] << "\nRight: " << keySpecialStates[GLUT_KEY_RIGHT] << endl;
@@ -167,22 +183,32 @@ void initializeKeySpecialStates() {
 	for(int i=0; i<246; i++) keySpecialStates[i] = false;
 }
 
+void initializeKeyStates() {
+	for(int i=0; i<255; i++) keyStates[i] = false;
+}
+
 void specialKeysHandler(int button, int x, int y) {
 	keySpecialStates[button] = true;
 }
 
 void keyboardHandler(unsigned char button, int x, int y) {
-	switch(button) {
-		case ESC_KEY:
-			exit(0);
-			break;
-		break;
+	if(button!=13) {
+		keyStates[button] = true;
 	}
 
 }
 
 void specialKeysUpHandler(int button, int x, int y) {
 	keySpecialStates[button] = false;
+}
+
+void keyboardUpHandler(unsigned char button, int x, int y) {
+	if(button!=13) {
+			keyStates[button] = false;
+		}
+	else {
+		keyStates[button] = true;
+	}
 }
 
 void performSpecialKeyOperations() {
@@ -212,3 +238,79 @@ void performSpecialKeyOperations() {
 		currentmv->m_state[X_AXIS] = MS_STOP;
 	}
 }
+
+MainScreen *mainScreen;
+Menu *mainMenu;
+Stage *testStage;
+DebugDraw drawclass;
+
+void fsmFunction(void) {
+	/*
+	 * Testing the usage of a FSM to develop a stage system
+	 */
+	//printf("ok");
+
+
+	glClear (GL_COLOR_BUFFER_BIT);
+	glPushMatrix();
+	//printf("%d\n",++t);
+
+	// State Machine to control Screens
+	switch(gameScreen) {
+
+
+		// Initial Screen
+		case Start_Screen:
+			// Initializations
+			if(!mainMenu) {
+				mainMenu = new Menu;
+				mainMenu->addMenuItem("New Game",NOT_SUB_LIST);
+				mainMenu->addMenuItem("Load Game",NOT_SUB_LIST);
+				mainMenu->addMenuItem("Settings",NOT_SUB_LIST);
+				//mainMenu->;
+			}
+			if(!mainScreen) mainScreen =  new MainScreen(mainMenu);
+			// Transition Function
+			if(keyStates[13] == true) {
+				printf("Transitioning to Stage\n");
+				keyStates[13] = false;
+				gameScreen = Stage_Screen;
+			}
+
+			// Actions on this stage
+			mainScreen->render();
+			break;
+
+		// Stage_Selection Screen
+		case Stage_Selection_Screen:
+			if(keyStates[13] == true) {
+				printf("Transitioning to Start_Screen\n");
+				keyStates[13] = false;
+				gameScreen = Start_Screen;
+
+			}
+			glClear (GL_COLOR_BUFFER_BIT);
+			glClearColor(1,1,1,0);
+			break;
+
+		// Stage Screen
+		case Stage_Screen:
+			//cout << "Chamou a Init";
+			if(!testStage) testStage = new Stage("../maps/test.map","../enemy/enemytest.ene");
+			testStage->render();
+			break;
+	};
+
+	// Looping
+
+	//glFlush();
+	glutPostRedisplay();
+	glutSwapBuffers();
+
+
+
+	/*
+	 * End Testing
+	 */
+}
+

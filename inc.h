@@ -44,6 +44,13 @@ using namespace std;
 #include "inc/enemy.h"
 #include "inc/contactListener.h"
 #include "inc/sound.h"
+#include "inc/MenuItem.h"
+#include "inc/Menu.h"
+#include "inc/GeneralScreen.h"
+#include "inc/MainScreen.h"
+#include "inc/Stage.h"
+
+
 
 
 #include "Render.h"
@@ -55,5 +62,23 @@ enum _moveState {
     MS_LEFT,
     MS_RIGHT,
   };
+
+enum gameScreenEnum {
+
+	Start_Screen,
+	Load_Screen,
+	Stage_Selection_Screen,
+	Stage_Screen,
+	Save_Screen,
+	Game_Over_Screen,
+	Settings_Screen
+};
+
+// Global vars
+extern bool keySpecialStates[246];
+extern bool keyStates[255];
+extern b2World *world;
+extern b2Body *MainAgent;
+extern DebugDraw drawclass;
 
 #endif /* INC_H_ */

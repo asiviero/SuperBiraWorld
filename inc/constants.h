@@ -101,4 +101,7 @@
 // Camera tolerance
 #define CAMERA_LIMIT 0.8
 
+// Menu List Constants
+#define HAS_SUB_LIST 1
+#define NOT_SUB_LIST 0
 #endif /* CONSTANTS_H_ */

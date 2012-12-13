@@ -9,5 +9,6 @@
 #define TERRAIN_H_
 
 #include "../inc.h"
+void loadTerrain(ifstream &map,b2World *world);
 
 #endif /* TERRAIN_H_ */

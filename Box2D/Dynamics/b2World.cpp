@@ -1287,10 +1287,12 @@ void b2World::DrawDebugData()
 		return;
 	}
 
+
 	uint32 flags = m_debugDraw->GetFlags();
 
 	if (flags & b2Draw::e_shapeBit)
 	{
+
 		for (b2Body* b = m_bodyList; b; b = b->GetNext())
 		{
 			const b2Transform& xf = b->GetTransform();
