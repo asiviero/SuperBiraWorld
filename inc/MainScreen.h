@@ -10,7 +10,7 @@
 
 #include "../inc.h"
 
-class MainScreen {
+class MainScreen : public Screen {
 public:
 	Menu *mainMenu;
 	MainScreen(Menu *menu = NULL);

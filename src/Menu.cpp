@@ -8,10 +8,7 @@
 #include "../inc.h"
 
 Menu::Menu() {
-	// TODO Auto-generated constructor stub
-	//printf("ok");
 	MenuList = new list <MenuItem*>;
-
 }
 
 Menu::~Menu() {

@@ -8,7 +8,7 @@
 #include "../inc.h"
 
 MenuItem::MenuItem(string title, int hasSubList) {
-	// TODO Auto-generated constructor stub
+
 	//subMenuList = NULL;
 	menuItemTitle = title;
 	if(hasSubList == HAS_SUB_LIST) {

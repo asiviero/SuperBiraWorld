@@ -37,6 +37,7 @@ using namespace std;
 #include "inc/list.h"
 #include "inc/terrain.h"
 #include "inc/m_move.h"
+#include "inc/keyboardHandler.h"
 #include "inc/directional.h"
 #include "inc/camera.h"
 #include "inc/enemyData.h"
@@ -44,6 +45,8 @@ using namespace std;
 #include "inc/enemy.h"
 #include "inc/contactListener.h"
 #include "inc/sound.h"
+#include "inc/Screen.h"
+#include "inc/GameData.h"
 #include "inc/MenuItem.h"
 #include "inc/Menu.h"
 #include "inc/GeneralScreen.h"
@@ -80,5 +83,10 @@ extern bool keyStates[255];
 extern b2World *world;
 extern b2Body *MainAgent;
 extern DebugDraw drawclass;
+extern Menu *mainMenu;
+extern GameData gameData;
+extern MainScreen *mainScreen;
+
+
 
 #endif /* INC_H_ */

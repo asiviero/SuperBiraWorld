@@ -8,7 +8,7 @@
 #ifndef STAGE_H_
 #define STAGE_H_
 
-class Stage {
+class Stage : public Screen {
 public:
 	// Properties
 	string enemiesFile, terrainFile;
