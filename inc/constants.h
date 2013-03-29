@@ -91,7 +91,7 @@
 #define TERRAIN 2
 
 // Speed Coefficients
-#define MAIN_AGENT_SPEED 10
+#define MAIN_AGENT_SPEED 5
 #define SLOW_ENEMY 1
 
 
@@ -104,4 +104,7 @@
 // Menu List Constants
 #define HAS_SUB_LIST 1
 #define NOT_SUB_LIST 0
+
+
 #endif /* CONSTANTS_H_ */
+

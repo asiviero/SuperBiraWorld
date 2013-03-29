@@ -5,3 +5,4 @@ Debug/makeoutput
 *.mk
 .cproject
 *~
+.settings/*

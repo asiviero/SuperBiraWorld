@@ -21,6 +21,8 @@ using namespace std;
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include "Box2D/Box2D.h"
+#include <png.h>
+#include "SOIL.h"
 
 // Sound Libs
 #include <SDL/SDL.h>
@@ -87,6 +89,7 @@ extern Menu *mainMenu;
 extern GameData gameData;
 extern MainScreen *mainScreen;
 
-
+// Graphic
+#define TEXTURE_LOAD_ERROR 0
 
 #endif /* INC_H_ */

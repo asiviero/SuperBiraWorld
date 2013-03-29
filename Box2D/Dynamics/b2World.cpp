@@ -16,12 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+#define TEXTURE_LOAD_ERROR 0
+
 #include "../../inc/agentData.h"
 #include "../../inc/m_move.h"
 #include "../../inc/enemyData.h"
 #include "../../inc/constants.h"
 #include "../../inc/userInput.h"
 #include "../../inc/sound.h"
+//#include "../../Render.h"
 
 
 
@@ -29,7 +32,7 @@ Mix_Chunk *phaser=NULL;
 
 #include <GL/gl.h>
 #include <GL/glut.h>
-
+#include <SOIL.h>
 
 #include <iostream>
 using namespace std;
@@ -52,6 +55,132 @@ using namespace std;
 #include <Box2D/Common/b2Draw.h>
 #include <Box2D/Common/b2Timer.h>
 #include <new>
+#include <cstdio>
+#include <png.h>
+
+extern GLuint texture[10];
+
+GLuint loadTexture(const string filename, int &width, int &height)
+ {
+   //header for testing if it is a png
+   png_byte header[8];
+
+   //open file as binary
+   FILE *fp = fopen(filename.c_str(), "rb");
+   if (!fp) {
+     return TEXTURE_LOAD_ERROR;
+   }
+
+   //read the header
+   fread(header, 1, 8, fp);
+
+   //test if png
+   int is_png = !png_sig_cmp(header, 0, 8);
+   if (!is_png) {
+     fclose(fp);
+     return TEXTURE_LOAD_ERROR;
+   }
+
+   //create png struct
+   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL,
+       NULL, NULL);
+   if (!png_ptr) {
+     fclose(fp);
+     return (TEXTURE_LOAD_ERROR);
+   }
+
+   //create png info struct
+   png_infop info_ptr = png_create_info_struct(png_ptr);
+   if (!info_ptr) {
+     png_destroy_read_struct(&png_ptr, (png_infopp) NULL, (png_infopp) NULL);
+     fclose(fp);
+     return (TEXTURE_LOAD_ERROR);
+   }
+
+   //create png info struct
+   png_infop end_info = png_create_info_struct(png_ptr);
+   if (!end_info) {
+     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+     fclose(fp);
+     return (TEXTURE_LOAD_ERROR);
+   }
+
+   //png error stuff, not sure libpng man suggests this.
+   if (setjmp(png_jmpbuf(png_ptr))) {
+     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+     fclose(fp);
+     return (TEXTURE_LOAD_ERROR);
+   }
+
+   //init png reading
+   png_init_io(png_ptr, fp);
+
+   //let libpng know you already read the first 8 bytes
+   png_set_sig_bytes(png_ptr, 8);
+
+   // read all the info up to the image data
+   png_read_info(png_ptr, info_ptr);
+
+   //variables to pass to get info
+   int bit_depth, color_type;
+   png_uint_32 twidth, theight;
+
+   // get info about png
+   png_get_IHDR(png_ptr, info_ptr, &twidth, &theight, &bit_depth, &color_type,
+       NULL, NULL, NULL);
+
+   //update width and height based on png info
+   width = twidth;
+   height = theight;
+
+   // Update the png info struct.
+   png_read_update_info(png_ptr, info_ptr);
+
+   // Row size in bytes.
+   int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+
+   // Allocate the image_data as a big block, to be given to opengl
+   png_byte *image_data = new png_byte[rowbytes * height];
+   if (!image_data) {
+     //clean up memory and close stuff
+     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+     fclose(fp);
+     return TEXTURE_LOAD_ERROR;
+   }
+
+   //row_pointers is for pointing to image_data for reading the png with libpng
+   png_bytep *row_pointers = new png_bytep[height];
+   if (!row_pointers) {
+     //clean up memory and close stuff
+     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+     delete[] image_data;
+     fclose(fp);
+     return TEXTURE_LOAD_ERROR;
+   }
+   // set the individual row_pointers to point at the correct offsets of image_data
+   for (int i = 0; i < height; ++i)
+     row_pointers[height - 1 - i] = image_data + i * rowbytes;
+
+   //read the png into image_data through row_pointers
+   png_read_image(png_ptr, row_pointers);
+
+   //Now generate the OpenGL texture object
+   GLuint texture;
+   glGenTextures(1, &texture);
+   glBindTexture(GL_TEXTURE_2D, texture);
+   glTexImage2D(GL_TEXTURE_2D,0, GL_RGBA, width, height, 0,
+       GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) image_data);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+   //clean up memory and close stuff
+   png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+   delete[] image_data;
+   delete[] row_pointers;
+   fclose(fp);
+
+   return texture;
+ }
+
 
 #define X_AXIS 0
 #define Y_AXIS 1
@@ -1002,21 +1131,23 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 	 * according to the directional commands or simply maintaining it when
 	 * nothing is pushed
 	 */
-
+		int i=0;
 		agentData *agentD = static_cast<agentData*>(body->GetUserData());
 		if(agentD->agentType == MAIN_AGENT) {
-				//cout << "I'm here\n";
+				//cout << "Agente " << i++ << "\n" ;
 				m_move *t = static_cast<m_move*>(agentD->getUserData());
 				mainAgent = body;
 
 				//cout << "X: " << t->m_state[X_AXIS] << " Y: " << t->m_state[Y_AXIS] << endl;
 				switch(t->m_state[X_AXIS]) {
 					  case MS_LEFT:  vel.x = -MAIN_AGENT_SPEED; break;
-					  case MS_STOP:  vel.x =  (body->GetLinearVelocity())(X_AXIS);; break;
+					  case MS_STOP:  vel.x =  (body->GetLinearVelocity())(X_AXIS); break;
 					  case MS_RIGHT: vel.x =  MAIN_AGENT_SPEED; break;
 				}
+
+				 //cout << t->isJumping << "\n";
 				if(t->m_state[Y_AXIS]==MS_UP) {
-					vel.y = MAIN_AGENT_SPEED*2;
+					vel.y = MAIN_AGENT_SPEED;
 				}
 				else {
 					vel.y = (body->GetLinearVelocity())(Y_AXIS);
@@ -1045,6 +1176,7 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 
 
 		if(agentD->agentType == ENEMY) {
+
 			if(agentD->scheduledForDestruction == true) {
 				DestroyBody(body);
 				phaser = Mix_LoadWAV("../VemUbirajara.wav");
@@ -1081,7 +1213,7 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 				//continue;
 			}
 			if(eD->intMovementDirection == Y_AXIS) { // Jumpers
-
+				//cout << "Agente " << i++ << "\n" ;
 				b2Vec2 enemyCurrentPosition,enemyCurrentVelocity;
 				enemyCurrentVelocity.x = 0;
 				enemyCurrentPosition = body->GetPosition();
@@ -1095,9 +1227,10 @@ void b2World::Step(float32 dt, int32 velocityIterations, int32 positionIteration
 				// Applying Speed
 				if(eD->isJumping)
 					enemyCurrentVelocity.y = eD->fSpeedCoefficient;
-				else
+				else {
+					//cout << "here!\n";
 					enemyCurrentVelocity.y = (body->GetLinearVelocity())(Y_AXIS);
-
+				}
 
 				body->SetLinearVelocity(enemyCurrentVelocity);
 			}
@@ -1219,6 +1352,7 @@ void b2World::DrawShape(b2Fixture* fixture, const b2Transform& xf, const b2Color
 
 	case b2Shape::e_polygon:
 		{
+
 			b2PolygonShape* poly = (b2PolygonShape*)fixture->GetShape();
 			int32 vertexCount = poly->m_vertexCount;
 			b2Assert(vertexCount <= b2_maxPolygonVertices);
@@ -1276,11 +1410,16 @@ void b2World::DrawJoint(b2Joint* joint)
 		m_debugDraw->DrawSegment(x1, p1, color);
 		m_debugDraw->DrawSegment(p1, p2, color);
 		m_debugDraw->DrawSegment(x2, p2, color);
+		break;
 	}
 }
 
 void b2World::DrawDebugData()
 {
+	/*
+	 * Nesta funçao que deve ser modificada para renderizar usando texturas
+	 *
+	 */
 	if (m_debugDraw == NULL)
 	{
 		cout << "it's null here bro" << endl;
@@ -1295,12 +1434,63 @@ void b2World::DrawDebugData()
 
 		for (b2Body* b = m_bodyList; b; b = b->GetNext())
 		{
+			agentData *agentD = static_cast<agentData*>(b->GetUserData());
 			const b2Transform& xf = b->GetTransform();
 			for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
 			{
 				if (b->IsActive() == false)
 				{
 					DrawShape(f, xf, b2Color(0.5f, 0.5f, 0.3f));
+				}
+				else if (agentD->agentType == MAIN_AGENT)
+				{
+					//DrawShape(f, xf, b2Color(1, 0, 0));
+					/*b2PolygonShape* poly = (b2PolygonShape*)f->GetShape();
+								int32 vertexCount = poly->m_vertexCount;
+								b2Assert(vertexCount <= b2_maxPolygonVertices);
+								b2Vec2 vertices[b2_maxPolygonVertices];
+
+								for (int32 i = 0; i < vertexCount; ++i)
+								{
+									vertices[i] = b2Mul(xf, poly->m_vertices[i]);
+								}*/
+					//f->
+
+					glMatrixMode(GL_PROJECTION);
+					glPushMatrix();
+					glLoadIdentity();
+					glOrtho(0.0, glutGet(GLUT_WINDOW_WIDTH), 0.0, glutGet(GLUT_WINDOW_HEIGHT), -1.0, 1.0);
+					glMatrixMode(GL_MODELVIEW);
+					glPushMatrix();
+
+
+					glLoadIdentity();
+					glDisable(GL_LIGHTING);
+
+
+					glColor3f(1,1,1);
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+
+					// Draw a textured quad
+					glBegin(GL_QUADS);
+					glTexCoord2f(0, 0); glVertex2f(MAIN_WINDOW_WIDTH/2-30, b->GetPosition().y+30);
+					glTexCoord2f(0, 1); glVertex2f(MAIN_WINDOW_WIDTH/2-30, b->GetPosition().y+90);
+					glTexCoord2f(1, 1); glVertex2f(MAIN_WINDOW_WIDTH/2+30, b->GetPosition().y+90);
+					glTexCoord2f(1, 0); glVertex2f(MAIN_WINDOW_WIDTH/2+30, b->GetPosition().y+30);
+					glEnd();
+
+
+					glDisable(GL_TEXTURE_2D);
+					glPopMatrix();
+
+
+					glMatrixMode(GL_PROJECTION);
+					glPopMatrix();
+
+					glMatrixMode(GL_MODELVIEW);
+
 				}
 				else if (b->GetType() == b2_staticBody)
 				{
@@ -1314,10 +1504,14 @@ void b2World::DrawDebugData()
 				{
 					DrawShape(f, xf, b2Color(0.6f, 0.6f, 0.6f));
 				}
+
+
+
 				else
 				{
 					DrawShape(f, xf, b2Color(0.9f, 0.7f, 0.7f));
 				}
+
 			}
 		}
 	}
